@@ -72,33 +72,33 @@ namespace PageHook
 
 	auto get_pml4e(std::uint64_t virt) -> pml4e_64*
 	{
-		//PML4EµÄindex*8+PML4E»ùÖÊ
+		//PML4Eçš„index*8+PXEåŸºè´¨
 		auto pml4e_idx = (virt >> 39) & 0x1FF;
 		return reinterpret_cast<pml4e_64*>((pml4e_idx << 3) + pxe_base);
 	}
 
 	auto get_pdpte(std::uint64_t virt) -> pdpte_64*
 	{
-		//PDPTEµÄindex*8+PDPTE»ùÖÊ
+		//PDPTEçš„index*8+PPEåŸºè´¨
 		auto pdpte_idx = (virt >> 30) & 0x3FFFF;
 		return reinterpret_cast<pdpte_64*>((pdpte_idx << 3) + ppe_base);
 	}
 
 	auto get_pde(std::uint64_t virt) -> pde_64*
 	{
-		//PDEµÄindex*8+PDPTE»ùÖÊ
+		//PDEçš„index*8+PDEåŸºè´¨
 		auto pde_idx = (virt >> 21) & 0x7FFFFFF;
 		return reinterpret_cast<pde_64*>((pde_idx << 3) + pde_base);
 	}
 
 	auto get_pte(std::uint64_t virt) -> pte_64*
 	{
-		//PTEµÄindex*8+PDPTE»ùÖÊ
+		//PTEçš„index*8+PTEåŸºè´¨
 		auto pte_idx = (virt >> 21) & 0xFFFFFFFFF;
 		return reinterpret_cast<pte_64*>((pte_idx << 3) + pte_base);
 	}
 
-	//´óÒ³²ğ·ÖĞ¡Ò³
+	//å¤§é¡µæ‹†åˆ†å°é¡µ
 	auto split_large_page(pde_64* large_page) -> std::tuple<pt_entry_64*, uint64_t>
 	{
 		if (!large_page->large_page)
@@ -154,7 +154,7 @@ namespace PageHook
 	}
 
 	/// <summary>
-	/// ¼ÇµÃÇĞ»»µ½Ä¿±ê½ø³ÌµÄµØÖ·¿Õ¼äºóÔÙ½øĞĞpage hook
+	/// è®°å¾—åˆ‡æ¢åˆ°ç›®æ ‡è¿›ç¨‹çš„åœ°å€ç©ºé—´åå†è¿›è¡Œpage hook
 	/// </summary>
 	/// <param name="target function pointer"></param>
 	/// <param name="hook function pointer"></param>
@@ -164,7 +164,7 @@ namespace PageHook
 	{
 		init_pte_base();
 
-		//»ñÈ¡pxe
+		//è·å–pxe
 		auto pml4e = get_pml4e(reinterpret_cast<std::uint64_t>(target_function));
 		auto pdpte = get_pdpte(reinterpret_cast<std::uint64_t>(target_function));
 		auto pde = get_pde(reinterpret_cast<std::uint64_t>(target_function));
@@ -180,7 +180,7 @@ namespace PageHook
 		if (pde->present && !pde->large_page)
 			pt = (pt_entry_64*)pfn_to_virt(pde->page_frame_number);
 
-		//´Ópml4e¿ªÊ¼¹¹ÔìÒ³±í
+		//ä»pml4eå¼€å§‹æ„é€ é¡µè¡¨
 		auto [new_pdpt_pfn, new_pdpt_virt] = create_pagetable();
 		copy_pagetable(new_pdpt_virt, pdpt);
 
@@ -192,7 +192,7 @@ namespace PageHook
 
 		auto [hook_page_pfn, hook_page_virt] = copy_page(page_align(reinterpret_cast<std::uint64_t>(target_function)));
 
-		//¶¨Î»×ã¹»³¤µÄ´úÂëÀ´Ğ´jmp code
+		//å®šä½è¶³å¤Ÿé•¿çš„ä»£ç æ¥å†™jmp code
 		size_t code_len = 0;
 		hde64s hde64_code;
 		while (code_len < 14) {
@@ -200,7 +200,7 @@ namespace PageHook
 			code_len += hde64_code.len;
 		}
 
-		//Éú³Étramplineº¯Êı
+		//ç”Ÿæˆtramplineå‡½æ•°
 		auto trampline = new unsigned char[0x100];
 		ULARGE_INTEGER jmp_to_back = { .QuadPart = (uint64_t)(target_function)+code_len };
 		RtlCopyMemory(trampline, target_function, code_len);
@@ -208,7 +208,7 @@ namespace PageHook
 		RtlCopyMemory(&trampline[code_len + 1], &jmp_to_back.LowPart, sizeof(uint32_t));
 		RtlCopyMemory(&trampline[code_len + 9], &jmp_to_back.HighPart, sizeof(uint32_t));
 
-		//ÔÚĞÂµÄÒ³ÃæÉÏhook
+		//åœ¨æ–°çš„é¡µé¢ä¸Šhook
 		uint64_t page_offset = (uint64_t)(target_function) & 0xFFF;
 		uint8_t* hook_page = reinterpret_cast<uint8_t*>(hook_page_virt);
 		ULARGE_INTEGER jmp_to_detour = { .QuadPart = (uint64_t)(hook_function) };
@@ -219,13 +219,13 @@ namespace PageHook
 
 		virt_helper helper = { .all = reinterpret_cast<std::uint64_t>(target_function) };
 
-		//½«ĞÂµÄÒ³ÃæÁ´½ÓÆğÀ´
+		//å°†æ–°çš„é¡µé¢é“¾æ¥èµ·æ¥
 		new_pdpt_virt[helper.index.pdpte].page_frame_number = new_pd_pfn;
 		new_pd_virt[helper.index.pde].page_frame_number = new_pt_pfn;
 		new_pd_virt[helper.index.pde].large_page = 0;
 		new_pt_virt[helper.index.pte].page_frame_number = hook_page_pfn;
 
-		//×îºóÒ»²½,ĞŞ¸Äpml4e
+		//æœ€åä¸€æ­¥,ä¿®æ”¹pml4e
 		pml4e->page_frame_number = new_pdpt_pfn;
 
 		__invlpg(pml4e);
