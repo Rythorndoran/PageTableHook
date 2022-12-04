@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Driver Files">
+      <UniqueIdentifier>{8E41214B-6785-4CFE-B992-037D68949A14}</UniqueIdentifier>
+      <Extensions>inf;inv;inx;mof;mc;</Extensions>
+    </Filter>
+    <Filter Include="Header Files\IA32">
+      <UniqueIdentifier>{cd3eb3db-34ab-48e9-8029-3590f49d306a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Hde">
+      <UniqueIdentifier>{c8389574-5369-4792-bf29-a0f138eed0b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Hde">
+      <UniqueIdentifier>{3fa166f9-4da6-4772-97a1-9ae13ecdc758}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PageHook.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="STL.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="hde\hde32.cpp">
+      <Filter>Source Files\Hde</Filter>
+    </ClCompile>
+    <ClCompile Include="hde\hde64.cpp">
+      <Filter>Source Files\Hde</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="IA32\ia32.hpp">
+      <Filter>Header Files\IA32</Filter>
+    </ClInclude>
+    <ClInclude Include="IA32\ia32_compact.h">
+      <Filter>Header Files\IA32</Filter>
+    </ClInclude>
+    <ClInclude Include="hde\hde.h">
+      <Filter>Header Files\Hde</Filter>
+    </ClInclude>
+    <ClInclude Include="hde\hde_stdint.h">
+      <Filter>Header Files\Hde</Filter>
+    </ClInclude>
+    <ClInclude Include="hde\hde32.h">
+      <Filter>Header Files\Hde</Filter>
+    </ClInclude>
+    <ClInclude Include="hde\hde64.h">
+      <Filter>Header Files\Hde</Filter>
+    </ClInclude>
+    <ClInclude Include="hde\table32.h">
+      <Filter>Header Files\Hde</Filter>
+    </ClInclude>
+    <ClInclude Include="hde\table64.h">
+      <Filter>Header Files\Hde</Filter>
+    </ClInclude>
+    <ClInclude Include="PageHook.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
