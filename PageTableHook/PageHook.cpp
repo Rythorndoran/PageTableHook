@@ -93,7 +93,7 @@ namespace PageHook
 
 	auto get_pte(std::uint64_t virt) -> pte_64*
 	{
-		//PTE的index*8+PTE基质
+		//PTE的index*8+PTE基质 
 		auto pte_idx = (virt >> 12) & 0xFFFFFFFFF;
 		return reinterpret_cast<pte_64*>((pte_idx << 3) + pte_base);
 	}
